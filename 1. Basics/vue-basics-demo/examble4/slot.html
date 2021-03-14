@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>内置组件slot 示例</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>内置组件slot 示例</h1>
+    <!-- slot 英文意思：插槽 -->
+    <hr>
+    <div id="app">
+        <login-info style="margin-bottom: 5px;">
+            <!-- 插槽未命名，所以这里不用 slot 属性指定插槽 -->
+            <span><img :src="userInfo.photoUrl" style="width: 15px; height:15px; border-radius: 40px;"></span>
+            <span>{{userInfo.name}}</span>
+        </login-info>
+        <user-info :photo-url="userInfo.photoUrl">
+            <!-- 注意：自2.6.0起，slot 属性已被废弃，虽然仍可用但V3.0不会支持，应使用v-slot指令替代 -->
+            <span slot="name" >{{userInfo.name}}</span>
+            <span slot="sex" v-text="userInfo.sex"></span>
+            <span slot="registerDate">2018-6-1</span>
+            <!-- <span slot="photoUrl"></span> -->
+            这一段可以被放进默认插槽的位置吗？
+            <template v-slot:photourl >
+                <!-- 新语法：使用 v-slot:name 指令的 template 标签(一定是template) -->
+                <!-- tips: name不支持大写，否则会失效(旧版的slot属性则允许) -->
+                <img :src="userInfo.photoUrl" style="width: 80px; height:80px; border-radius: 40px;">
+            </template>
+            <p>还有这段，可以放进默认插槽的位置吗？</p>
+            <template v-slot:undef>这个插槽没有定义，被移除了</template>
+        </user-info>
+        <login-info2 style="margin-bottom: 5px;">
+            <template v-slot:default="slotProps">{{slotProps.inner_user.name}} </template>
+        </login-info2>
+    </div>
+    <!-- 组件1 模板 (定义默认插槽) -->
+    <template id="tep-login-info">
+        <div style="background: #ebe; border: solid 1px #e5e; border-radius: 8px; padding: 10px; width: 300px;">
+            用户 [<slot>未知</slot>] 已登录
+            <!-- 或： 用户 [<slot name="default"></slot>] 已登录 -->
+            <!-- slot标签内的内容是缺省显示的内容 -->
+        </div>
+    </template>
+    <!-- 组件2 模板 -->
+    <template id="tep-user-info">
+        <div style="background: #eee; border-radius: 8px; padding: 10px; width: 300px;">
+            <h4>用户信息</h4>
+            <p>用户名：<slot name="name"></slot></p>
+            <p>性别：<slot name="sex"></slot></p>
+            <p>注册日期：<slot name="registerDate"></slot></p>
+            <p>用户头像：<slot name="photourl"></slot></p>
+            <p style="background: #fff; color: rgb(88, 134, 233); padding: 5px; border-radius: 20px;">
+                <slot>-- default slot --</slot>
+            </p>
+            <p style="background: #f00; color: #fff; padding: 5px; border-radius: 20px;">
+                <slot>-- default slot 2 --</slot>
+            </p>
+        </div>
+    </template>
+    <!-- 组件3 模板 (作用域插槽) -->
+    <template id="tep-login-info2">
+        <div style="background: rgb(187, 236, 238); border: solid 1px rgb(118, 85, 238); border-radius: 8px; padding: 10px; width: 300px;">
+            用户 [<slot v-bind:inner_user="user"></slot>] 已登录<!-- 不支持将 inner_user 写成大小写(innerUser)-->
+        </div>
+    </template>
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#app",
+            data: {
+                userInfo: {
+                    name: "刘亦菲",
+                    sex: "女",
+                    photoUrl: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564900385232&di=b498bccee4b507faa1c283047fbb12f5&imgtype=0&src=http%3A%2F%2Fcms-bucket.nosdn.127.net%2F85c09a8ff3ba470c9c5e5700b2d6f36620180111162936.jpeg"
+                }
+            },
+            components:{
+                "userInfo": {
+                    template: "#tep-user-info",
+                },
+                "login-info": {
+                    template: "#tep-login-info"
+                },
+                "login-info2": {
+                    template: "#tep-login-info2",
+                    data(){
+                        return {
+                            user: {
+                                name: "高圆圆"
+                            }
+                        }
+                    }
+                },
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-bind 示例</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+    <style type="text/css">
+        .img{ width: 500px; border-radius: 20px; margin: 20px; }
+        .img-2{ width: 400px; border-radius: 20px; margin: 20px; }
+        .shadow{ box-shadow: 0 0 20px 5px #555; }
+    </style>
+</head>
+<body>
+    <h1>v-bind 示例</h1>
+    <hr>
+    <div id="app">
+        <img v-bind:src="imgSrcs[0]" v-bind:class="'img'" >
+        <img :src="imgSrcs[1]" :class="{'img-2':true}">
+        <img :src="imgSrcs[1]" :class="['img','shadow']" >
+        <img :src="imgSrcs[0]" :class="['img',{shadow:isOK}]" >
+        <img :src="imgSrcs[0]" :class="isOK?'img':'shadow'" >
+    </div>
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#app",
+            data: {
+                imgSrcs:[
+                    "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564900385232&di=b498bccee4b507faa1c283047fbb12f5&imgtype=0&src=http%3A%2F%2Fcms-bucket.nosdn.127.net%2F85c09a8ff3ba470c9c5e5700b2d6f36620180111162936.jpeg",
+                    "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564900354556&di=f6ca91df5669a2499a773adee71b5ec3&imgtype=0&src=http%3A%2F%2Fa.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F838ba61ea8d3fd1fe94b68333c4e251f95ca5f7d.jpg", 
+                ],
+                isOK: true
+            }
+        })
+    </script>
+</body>
+</html>

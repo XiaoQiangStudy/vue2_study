@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>mixins选项 示例</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>mixins选项 示例</h1>
+    <hr>
+    <div id="app">
+        <p v-text="score"></p>
+        <button @click="plus()">加分</button>
+        <button @click="minus()">减分</button>
+    </div>
+    <script type="text/javascript">
+        let mixinCode = {
+            updated(){
+                console.log("[选项混入代码] updated事件 -- 哈哈，完成更新")
+            },
+            methods:{
+                minus:function(){
+                    this.score--;
+                }
+            }
+        }
+        Vue.mixin({
+            updated(){
+                console.log("[全局混入代码] updated事件 -- 嘿嘿，完成更新")
+            }
+        })
+        let app = new Vue({
+            el: "#app",
+            data: {
+                score: 0
+            },
+            methods: {
+                plus: function() {
+                    this.score++;
+                }
+            },
+            updated() {
+                console.log("[原有代码] updated事件 -- 完成更新")
+            },
+            mixins: [mixinCode]
+        })
+        
+    </script>
+</body>
+</html>

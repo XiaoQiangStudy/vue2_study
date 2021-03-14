@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>computed选项 示例</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>computed选项 示例</h1>
+    <hr>
+    <div id="app">
+        <p>{{price}}</p>
+        <p>{{formatPrice}}</p>
+        ----------
+        <ul>
+            <li v-for="item in news">{{item.title}} - {{item.date}}</li>
+        </ul>
+        ----------
+        <ul>
+            <li v-for="item in sortedNews">{{item.title}} - {{item.date}}</li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#app",
+            data: {
+                price: 128,
+                news: [
+                    {title:"打脸了!暴徒多次假扮记者被查,香港记协竟妄言“妨碍新闻自由”", date:"2019/09/04"},
+                    {title:"新闻分析:篮板崩溃、外线失准,中国男篮终未跨过那道坎", date:"2019/09/05"},
+                    {title:"今年“早立秋凉嗖嗖”?中国气象局答封面新闻:小心9月“秋老虎”", date:"2019/09/06"},
+                    {title:"“美心大小姐”硬气回应乱港分子", date:"2019/09/08"},
+                ]
+            },
+            computed:{
+                formatPrice: function(){
+                    return "¥" + this.price + " 元";
+                },
+                sortedNews: function(){
+                    //sort方法会修改原数组，这里使用[].concat克隆原数组，避免sort对原数组造成污染
+                    return [].concat(this.news).sort((a,b)=> a.date < b.date ? 1: -1);
+                    /**
+                     * 【复习】
+                     * 会修改数组本身的数组方法：sort(), reverse()，以及4个堆栈/队列操作方法（push、pop、unshift、shift）
+                     * 克隆数组的简易技巧：(1)arr.slice(); (2)[].concat(arr)
+                     */
+                }
+            }
+        })
+    </script>
+</body>
+</html>

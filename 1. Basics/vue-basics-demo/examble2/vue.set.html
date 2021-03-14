@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue.set 示例</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>Vue.set 示例</h1>
+    <hr>
+    <div id="app">
+        <p v-text="score"></p>
+        <ul>
+            <li v-for="a in arr">{{a}}</li>
+        </ul>
+        <p v-text="obj.ooo"></p>
+        <button onclick="update()">update</button>
+    </div>
+    <script type="text/javascript">
+        let outData = {
+            score: 0,
+            arr: ["aaa", "bbb", "ccc", "ddd"],
+            obj: {
+                ooo: "ooo"
+            }
+        }
+        function update(){
+            /* 对普通变量直接赋值，能够更新 */
+            // outData.score++;
+            // app.score++;
+            // Vue.set(outData, "score", 99);
+
+            /* 直接赋值数组元素的值时，无法更新 */
+            outData.arr[2] = "xxx";      //如果上面能有效触发Vue更新的代码注释掉，则本行代码不会发生更新
+            // Vue.set(outData.arr, 2, "yyy");
+
+            /* 直接赋值数组长度时，无法更新 */
+            // outData.arr.length = 7;
+            // Vue.set(outData.arr, "length", 3);//!!但是，这样设置也无法更新
+
+            /* 对对象的属性直接赋值，能够更新 */
+            // outData.obj.ooo = "xxx";
+
+            /* 究其原因，可能跟 Vue 采用 “数据劫持” 来实现 “双向绑定” 的原理有关 
+             * set 及 get 无法直接应用于数组元素上
+             */
+        }
+
+        let app = new Vue({
+            el: "#app",
+            data: outData //这样赋值后，Vue 会改写 outData（修改其中属性为get/set属性，增加一个Observer对象）
+        })
+    </script>
+</body>
+</html>

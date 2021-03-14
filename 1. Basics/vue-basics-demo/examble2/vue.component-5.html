@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Component 示例(5) - 向组件传值和绑定事件</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>Component 示例(5) - 向组件传值和绑定事件</h1>
+    <hr>
+    <div id="app">
+        <input-add @add-click="addItem"></input-add>
+        <list :data="list" :author="author"></list>
+    </div>
+    <script type="text/javascript">
+        class Person{
+            constructor(name){
+                this.name = name;
+            }
+            name
+        }
+        //定义 input-add 组件
+        Vue.component('inputAdd', {
+            template: `<div>
+                <input type="text" v-model="title" />
+                <button @click="addItem">添加</button>
+            </div>`,
+            data(){
+                return {
+                    title: ""
+                }
+            },
+            methods: {
+                addItem(){
+                    this.$emit('add-click', this.title);
+                }
+            }
+        });
+        // 定义 list 组件
+        Vue.component('list', {
+            template: `<div>
+            <ul>
+                <li v-for="(item, index) in data" :key="item.id">
+                    <span>{{item.title}}</span>
+                    <button @click="remove(index)">删除</button>
+                </li>
+            </ul>
+            <p>作者：{{author.name}}</p>
+            </div>`,
+            props: {
+                data: {
+                    type: Array, //指定类型为数组
+                    default: [] //默认值
+                },
+                author: {
+                    required: true, //必填
+                    type: Person, //必须是自定义的 Person 类型
+                    validator(val){// author.name 必须是字符串
+                        return typeof val.name === 'string';
+                    }
+                }
+            },
+            methods: {
+                remove(index){
+                    this.data.splice(index, 1);
+                }
+            }
+        });
+        let app = new Vue({
+            el: "#app",
+            data:{
+                list: [
+                    {
+                        id: 1,
+                        title: "好好学习"
+                    },
+                    {
+                        id: 2,
+                        title: "天天向上"
+                    },
+                ],
+                author: new Person('Jayhoo')
+            },
+            methods:{
+                addItem(title){
+                   let lastItem = this.list[this.list.length-1] || {};
+                   this.list.push({
+                        id: (lastItem.id || 0) + 1,
+                        title
+                   });
+                } 
+            }
+        });
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>全局API Vue.extends() 与组件继承</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>全局API Vue.extends() 与组件继承</h1>
+    <hr>
+    <father></father>
+    <hr>
+    <div id="app">
+        <child></child>
+    </div>
+    <script type="text/javascript">
+        //通过全局 API 定义一个 extend
+        let FatherExtend = Vue.extend({
+            template: `
+                <div>
+                    <p>{{message}}</p>
+                    <p>{{score}}</p>
+                    <button @click="add()">加分</button>
+                </div>
+            `,
+            data(){
+                return{
+                    message: "大家好我是 Father Extend",
+                    score: 0
+                }
+            },
+            methods: {
+                add(){
+                    console.log("Father Extend ADD");
+                    this.score++;
+                }
+            },
+        });
+        //挂载到 father 标签
+        new FatherExtend().$mount("father")
+
+        //定义子组件 Child
+        Vue.component("child", {
+            //template 继承，这里不定义
+            //重写 message
+            data(){
+                return{
+                    message: "大家好我是子组件 Child"
+                }
+            },
+            //重写add方法，使之一次加2
+            methods: {
+                add(){
+                    this.score+=2;
+                }
+            },
+            //通过 extends 选项来继承 FatherExtend
+            extends: FatherExtend
+        })
+        
+
+        let app = new Vue({
+            el: "#app"
+        })
+        
+    </script>
+</body>
+</html>

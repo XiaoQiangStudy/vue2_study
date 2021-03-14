@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue.directive 示例</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>Vue.directive 示例</h1>
+    <hr>
+    <div id="app">
+        v-message:
+        <p v-message="message">{{message}}</p>
+        <hr>
+        v-score:
+        <p v-score="score" v-text="score"></p>
+        <button v-on:click="plus">加分</button>
+        <hr>
+        对照组（无指令）:
+        <p v-text="score2"></p>
+        <button v-on:click="minus">减分</button>
+    </div>
+    <div>
+        <hr>
+        <button onclick="destroyApp()">注销APP（可解绑）</button>
+    </div>
+    <script type="text/javascript">
+        /* 基本使用 */
+        Vue.directive("message", function (el, binding, vnode) {
+            console.log("[v-message] this is from v-message directive");
+            // console.log(el);
+            // console.log(binding);//name, rawName, expression, value, def.bind, def.update
+            // console.log(vnode);
+            console.log(binding.def);
+        });
+        /* 生命周期 */
+        Vue.directive("score", {
+            "bind": function(el, binding, vnode){
+                console.log("[v-score] 1 bind --- 与元素绑定"); 
+                // -------------------------------------------
+                // console.log(el);
+                // console.log(binding);
+                // console.log(vnode);
+            },
+            "inserted": function(){ console.log("[v-score] 2 inserted --- 指令元素插入"); },
+            "update": function(el, binding, vnode) { 
+                console.log("[v-score] 3 update --- 指令元素所在模板更新"); 
+                // -------------------------------------------
+                // console.log(el);
+                // console.log(binding);
+                // console.log(vnode);
+                console.log(binding.def);
+                // -------------------------------------------
+                // if(el.bindingValue == binding.value){
+                //     console.log("无意义的 update");
+                // }
+                // el.bindingValue = binding.value;
+            },
+            "componentUpdated": function(){ console.log("[v-score] 4 componentUpdated --- 指令元素所在模板完成更新周期"); },
+            "unbind": function(){ console.log("[v-score] 5 unbind --- 与元素解绑"); }
+        });
+        /* 注销app */
+        function destroyApp(){
+            app.$destroy();
+        }
+        
+        /* 正常逻辑 */
+        let app = new Vue({
+            el: "#app",
+            data: {
+                message:"Hello World! 我学会了！",
+                score: 0,
+                score2: 0
+            },
+            methods: {
+                plus(){
+                    this.score++;
+                },
+                minus(){
+                    this.score2--;
+                }
+            }
+        })
+    </script>
+</body>
+</html>

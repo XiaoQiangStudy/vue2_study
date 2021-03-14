@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Component 示例(3) - 组件嵌套</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>Component 示例(3) - 组件嵌套</h1>
+    <hr>
+    <div id="app">
+        <baidu></baidu>
+    </div>
+    <script type="text/javascript">
+        //定义全局组件 Yahoo
+        Vue.component("yahoo", {
+            template: `<p style="color:#90f;font-size:14px">Hi~我是子组件Yahoo! 而且我是全局组件</p>`
+        });
+        //定义组件 baidu 的选项参数
+        let baiduComponent = {
+            template: `
+                <p style="color:#09f;font-size:18px">
+                    大家好，我是父组件Baidu
+                    <google></google>
+                    <yahoo></yahoo>
+                    -----------------------------
+                </p>
+                `,
+            components:{
+                "google": {
+                    template: `<p style="color:#f90;font-size:14px">Hi~我是子组件Google</p>`
+                }
+            }
+        };
+
+        let app = new Vue({
+            el: "#app",
+            components: {
+                "baidu": baiduComponent
+            }
+        });
+        
+    </script>
+</body>
+</html>

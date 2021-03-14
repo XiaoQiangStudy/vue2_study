@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Component 示例(1) - 基本使用</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>Component 示例(1) - 基本使用</h1>
+    <hr>
+    <div id="app1">
+        <baidu></baidu>
+        <google></google>
+    </div>
+    <div id="app2">
+        <baidu></baidu>
+    </div>
+    <script type="text/javascript">
+        //定义全局组件 baidu
+        Vue.component("baidu", {
+            /* 内部这里的写法跟 Vue.extend 遵循一样的规则，其中 data 也是必须是函数 */
+            template: `<button :title='url' @click='go'>{{text}}</button>`,
+            data: function(){
+                return {
+                    url: "https://www.baidu.com",
+                    text: "大家好，我是全局组件Baidu"
+                }
+            },
+            methods: {
+                go: function(){
+                    window.open(this.url);
+                }
+            },
+        });
+        // 虽然 baidu 这个组件是全局的，但必须在app之前先声明，否则app中使用会报错
+
+
+        let app1 = new Vue({
+            el: "#app1",
+            //定义局部组件 google
+            components: {
+                "google": {
+                    template: `<p style="color:#f90">Hi~我是局部组件Google</p>`
+                }
+            }
+        });
+        let app2 = new Vue({
+            el: "#app2"
+        });
+        
+    </script>
+</body>
+</html>

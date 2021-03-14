@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue实例事件操作 示例</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>Vue实例事件操作 示例</h1>
+    <hr>
+    <div id="app">
+        <p>{{score}}</p>
+        <button @click="add()">加加</button>
+    </div>
+    <button onclick="reduce()">减减</button>
+    <button onclick="doOnce()">doOnce</button>
+    <button onclick="outterAdd()">外部加加</button>
+    <button onclick="offReduce()">干掉减减</button>
+    <button onclick="offDoOnce()">干掉doOnce</button>
+    <button onclick="offAdd()">干掉加加</button>
+
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#app",
+            data: {
+                score: 0
+            },
+            methods: {
+                add: function(){
+                    this.score++;
+                }
+            }
+        });
+
+        /* 通过 $on 定义一个 reduce 事件监听 */
+        app.$on("reduce", function(i=1, msg){
+            this.score-= i;
+            console.log(msg + "-" + this.score);
+        });
+        //通过 app.$emit() 来调用 reduce 事件
+        function reduce(){
+            app.$emit("reduce", 2, "减啊啊");
+        }
+
+        /* 通过 $once 定义一个只被触发一次的事件监听 doOnce (一旦触发，该事件监听就会被移除) */
+        app.$once("doOnce", function(){
+            this.score *= 100;
+            console.log("我来啦，我只执行一次，现在score = " + this.score);
+        });
+        function doOnce(){
+            app.$emit("doOnce");
+        }
+
+        /* 使用 $off 移除 $on 及 $once 定义的事件 reduce 及 doOnce */
+        function offReduce(){
+            app.$off("reduce");
+        }
+        function offDoOnce(){
+            app.$off("doOnce");
+        }
+
+        /** 总结：
+         * $on 和 $off 就相当于在 Vue 实例上的 addEventListener 和 removeEventListener
+         * $once 定义了一种只触发一次的事件监听
+         * 通过 $emit 来手动触发Vue实例上的事件 */
+    </script>
+</body>
+</html>

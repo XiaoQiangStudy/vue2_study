@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Component 示例(8) - 父子组件生命周期的关系</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>Component 示例(8) - 父子组件生命周期的关系</h1>
+    <hr>
+    <div id="app">
+        <h4>Vue</h4>
+        <div>{{num}} <button @click="update">update</button></div>
+        <div>{{inheritNum}} <button @click="inheritUpdate">inherit update</button></div>
+        <father-com :inherit-num="inheritNum"></father-com>
+        <button @click="destroy">vue destroy</button>
+    </div>
+    <script type="text/javascript">
+        //定义子组件(哥哥)
+        let childComFirst = {
+            template: `<div style="background:#fc0; padding: 10px; margin: 10px;">
+                <h4>子组件-First</h4>
+                {{num}} <button @click="update">update</button>
+                <p>inherit num: {{inheritNum}} </p>
+            </div>`,
+            data(){
+                return {
+                    num: 0
+                }
+            },
+            props: ['inheritNum'],
+            methods: {
+                update(){
+                    this.num++;
+                }
+            },
+            beforeCreate(){
+                console.log("%cfirst child before create", "color:#f60");
+            },
+            created(){
+                console.log("%cfirst child created", "color:#f60");
+            },
+            beforeMount(){
+                console.log("%cfirst child before mount", "color:#f60");
+            },
+            mounted(){
+                console.log("%cfirst child mounted", "color:#f60");
+            },
+            beforeUpdate(){
+                console.log("%cfirst child before update", "color:#f60");
+            },
+            updated(){
+                console.log("%cfirst child updated", "color:#f60");
+            },
+            beforeDestroy(){
+                console.log("%cfirst child before destroy", "color:#f60");
+            },
+            destroyed(){
+                console.log("%cfirst child destroyed", "color:#f60");
+            }
+        };
+        //定义子组件(弟弟)
+        let childComLast = {
+            template: `<div style="background:#ffa; padding: 10px; margin: 10px;">
+                <h4>子组件-Last</h4>
+                {{num}} <button @click="update">update</button>
+                <p>inherit num: {{inheritNum}} </p>
+            </div>`,
+            data(){
+                return {
+                    num: 0
+                }
+            },
+            props: ['inheritNum'],
+            methods: {
+                update(){
+                    this.num++;
+                }
+            },
+            beforeCreate(){
+                console.log("%clast child before create", "color:#fc0");
+            },
+            created(){
+                console.log("%clast child created", "color:#fc0");
+            },
+            beforeMount(){
+                console.log("%clast child before mount", "color:#fc0");
+            },
+            mounted(){
+                console.log("%clast child mounted", "color:#fc0");
+            },
+            beforeUpdate(){
+                console.log("%clast child before update", "color:#fc0");
+            },
+            updated(){
+                console.log("%clast child updated", "color:#fc0");
+            },
+            beforeDestroy(){
+                console.log("%clast child before destroy", "color:#fc0");
+            },
+            destroyed(){
+                console.log("%clast child destroyed", "color:#fc0");
+            }
+        };
+        //定义父组件
+        Vue.component('fatherCom', {
+            template: `<div style="background:#ace; padding:10px; margin: 10px;">
+                <h4>父组件</h4>
+                {{num}} <button @click="update">update</button>
+                <p>inherit num: {{inheritNum}} </p>
+                <child-com-first :inherit-num="inheritNum"></child-com-first>
+                <child-com-last :inherit-num="inheritNum"></child-com-last>
+            </div>`,
+            data(){
+                return {
+                    num: 0
+                }
+            },
+            props: ['inheritNum'],
+            components:{
+                childComFirst: childComFirst,
+                childComLast: childComLast
+            },
+            methods: {
+                update(){
+                    this.num++;
+                }
+            },
+            beforeCreate(){
+                console.log("%cfather before create", "color:#0cf");
+            },
+            created(){
+                console.log("%cfather created", "color:#0cf");
+            },
+            beforeMount(){
+                console.log("%cfather before mount", "color:#0cf");
+            },
+            mounted(){
+                console.log("%cfather mounted", "color:#0cf");
+            },
+            beforeUpdate(){
+                console.log("%cfather before update", "color:#0cf");
+            },
+            updated(){
+                console.log("%cfather updated", "color:#0cf");
+            },
+            beforeDestroy(){
+                console.log("%cfather before destroy", "color:#0cf");
+            },
+            destroyed(){
+                console.log("%cfather destroyed", "color:#0cf");
+            }
+        });
+        //Vue 应用实例
+        let app = new Vue({
+            el: "#app",
+            data: {
+                num: 0,
+                inheritNum: 0 //逐层传递给子组件
+            },
+            methods: {
+                update(){
+                    this.num++;
+                },
+                inheritUpdate(){
+                    this.inheritNum++;
+                },
+                destroy(){
+                    this.$destroy();
+                }
+            },
+            beforeCreate(){
+                console.log("Vue before create");
+            },
+            created(){
+                console.log("Vue created");
+            },
+            beforeMount(){
+                console.log("Vue before mount");
+            },
+            mounted(){
+                console.log("Vue mounted");
+            },
+            beforeUpdate(){
+                console.log("Vue before update");
+            },
+            updated(){
+                console.log("Vue updated");
+            },
+            beforeDestroy(){
+                console.log("Vue before destroy");
+            },
+            destroyed(){
+                console.log("Vue destroyed");
+            }
+        });
+        
+    </script>
+</body>
+</html>

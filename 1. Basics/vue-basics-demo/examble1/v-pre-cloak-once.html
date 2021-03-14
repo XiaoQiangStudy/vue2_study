@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-pre & v-cloak & v-once 示例</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+    <style type="text/css">.text{color: #f60;}</style>
+</head>
+<body>
+    <h1>v-pre & v-cloak & v-once 示例</h1>
+    <hr>
+    <div id="app" v-cloak>
+        <h2>v-pre</h2>
+        <p v-pre>{{message}}</p>
+        <p v-pre v-text="message" :class="'text'" >此处是 message</p>
+        <h2>v-once</h2>
+        <p v-once>{{message}}</p>
+        <p v-text="message" :class="'text'" >此处是 message</p>
+        <input type="text" v-model="message">
+    </div>
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#app",
+            data: {
+                message:"Hello World! 我学会了！"
+            }
+        })
+    </script>
+</body>
+</html>

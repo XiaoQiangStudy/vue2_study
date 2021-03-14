@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Component 示例(9) - 异步加载组件</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>Component 示例(9) - 异步加载组件</h1>
+    <hr>
+    <div id="app">
+        <async-com v-if="showCom"></async-com>
+        <button @click="showCom=true">加载组件</button>
+    </div>
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#app",
+            components: {
+                asyncCom: {
+                    template: `<div>
+                        <p>需要用到import()，请在webpack项目或vue-cli项目中进行尝试</p>
+                        <code style="background:#f9f9f9; white-space: pre; padding:10px; margin: 10px; display:inline-block; border-radius:5px;">
+<i style="color:#0b0">/* 参考代码 */</i>
+components: {
+    asyncCom: ()=>{ import('./async-com.vue'); }
+} 
+                        </code>    
+                    </div>
+                    `
+                }
+            },
+            data: {
+                showCom: false
+            },
+            methods: {
+
+            },
+            
+        });
+        
+    </script>
+</body>
+</html>

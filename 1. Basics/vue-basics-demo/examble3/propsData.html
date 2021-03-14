@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>propsData选项 示例</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>propsData选项 示例</h1>
+    <hr>
+    <div id="app">
+        <message text="哈哈"></message><!-- 此处 text 自定义属性并没有作用 -->
+    </div>
+    <script type="text/javascript">
+        /* 定义一个 extend，以下演示如何通过 propsData 给 extend 传值 */
+        let MessageExtend = Vue.extend({
+            template: `<p style="color:#F90; font-size:18px">show message: {{msg}}, {{text}}</p>`,
+            props: ["msg","text"],
+            
+        });
+        new MessageExtend({propsData:{msg: "大家好，我是message"}}).$mount("message");
+    </script>
+</body>
+</html>

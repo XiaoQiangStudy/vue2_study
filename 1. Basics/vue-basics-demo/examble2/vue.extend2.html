@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue.extend 示例（追加）</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+    <style type="text/css">article{ border: solid 1px #ccc; border-radius: 8px; margin: 20px; padding:10px;}</style>
+</head>
+<body>
+    <!-- 为说明 Vue.extend 与 组件/指令 的区别，这里再追加一个 demo -->
+    <!-- 
+        extend 是对原有 Vue 的扩展，
+        其本身就是一个 Vue，可以像普通 Vue 一样进行实例化，
+        所以在 extend 的实例无需依附任何 Vue 实例就能使用，
+        这点是与 component 及 directive 的本质不同。
+    -->
+    <!--
+         component 与 directive 不能单独使用，它们必须用在 被 Vue实例 挂载的标签内；
+         extend 的实例就是一种 Vue 实例，因此在它的模板中，可以直接使用 component 定义的组件标签 
+         或者 directive 定义的自定义属性。
+         本 demo 将在 extend 中使用 component 及 directive，说明上述结论
+    -->
+    <h1>Vue.extend 示例（追加）</h1>
+    <hr>
+    <article>
+        <h2>我是普通标签，没有挂载 Vue</h2>
+        <bigOne>***</bigOne>
+        <p v-small-one="'Hello everybody, I\'m Small One directive!'">***</p>
+    </article>
+    <article id="app">
+        <h2>我是普通 Vue 标签</h2>
+        <big-one>***</big-One>
+        <p v-small-one="'Hello everybody, I\'m Small One directive!'">***</p>
+    </article>
+    <MyApp></MyApp>
+
+    <script type="text/javascript">
+        //定义要用到的全局组件、指令
+        Vue.component("bigOne",{
+            template: `<p style="color:#90f; font-size:36px;">Hello everybody, I'm Big One component!</p>`
+        });
+        Vue.directive("smallOne", {
+            bind: function(el, binding, vnode){
+                el.innerHTML = binding.value;
+                el.style = "color:#09f; font-size:13px;"
+            }
+        });
+
+        //new一个普通 Vue
+        let app = new Vue({
+            el: "#app"
+        });
+
+        //定义 extend，并挂载到 MyApp 标签
+        let myAppExtend = Vue.extend({
+            template: `
+                <article>
+                    <h2>我是 MyApp，是一个 Vue 扩展</h2>
+                    <big-one>***</big-one>
+                    <p v-small-one="'Hello everybody, I\\'m Small One directive!'">***</p>
+                </article>`//注意这里面 I'm Small One……的单引号要用双斜杠来转义，因其处于字符串中的字符串之中
+        });
+        new myAppExtend().$mount("MyApp");
+    </script>
+</body>
+</html>

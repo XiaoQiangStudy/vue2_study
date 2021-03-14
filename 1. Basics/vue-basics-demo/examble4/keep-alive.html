@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>内置组件keep-alive 示例</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>内置组件keep-alive 示例</h1>
+    <hr>
+    <div id="app">
+        <div style="display: flex;">
+            <fieldset>
+                <legend>使用 keep-alive</legend>
+                <keep-alive>
+                    <com-a v-if="which==='A'"></com-a>
+                    <com-b v-else-if="which==='B'"></com-b>
+                    <div v-else>
+                        <!-- 普通内容不会被缓存 -->
+                        <h4>D (normal div)</h4>
+                        <input type="text" placeholder="input sth here.." />
+                    </div>
+                    <!-- C 一直存在，但在渲染A和B时，不会渲染C -->
+                    <com-c></com-c>
+                </keep-alive>
+                <p>
+                    <button @click="show('A')">显示A</button>
+                    <button @click="show('B')">显示B</button>
+                    <button @click="show('D')">显示D</button>
+                </p>
+            </fieldset>
+        </div>
+        
+    </div>
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#app",
+            data:{
+                which: 'A'
+            },
+            methods:{
+                show(w){
+                    this.which = w;
+                }
+            },
+            components:{
+                "comA": {
+                    template: `
+                        <div>
+                            <h4>component A</h4>
+                            <input type="text" placeholder="input sth here.." />
+                        </div>
+                    `,
+                    mounted(){
+                        console.log("%c component A has mounted", "color:#f90;");
+                    },
+                    destroyed(){
+                        console.log("%c component A has destroy", "color:#f00;");
+                    },
+                    activated(){
+                        console.log("%c component A has activated", "color:#f90;");
+                    },
+                    deactivated(){
+                        console.log("%c component A has %cdeactivated", "color:#f90;", "color:#f00;");
+                    }
+                },
+                "comB": {
+                    template: `
+                        <div>
+                            <h4>component B</h4>
+                            <input type="text" placeholder="input sth here.." />
+                        </div>
+                    `,
+                    mounted(){
+                        console.log("%c component B has mounted", "color:#09f;");
+                    },
+                    destroyed(){
+                        console.log("%c component B has desdroy", "color:#f00;");
+                    },
+                    activated(){
+                        console.log("%c component B has activated", "color:#09f;");
+                    },
+                    deactivated(){
+                        console.log("%c component B has %cdeactivated", "color:#09f;", "color:#f00;");
+                    }
+                },
+                "comC": {
+                    template: `
+                        <div>
+                            <h4>component C</h4>
+                            <input type="text" placeholder="input sth here.." />
+                        </div>
+                    `,
+                    mounted(){
+                        console.log("%c component C has mounted", "color:#90f;");
+                    },
+                    destroyed(){
+                        console.log("%c component C has desdroy", "color:#f00;");
+                    },
+                    activated(){
+                        console.log("%c component C has activated", "color:#90f;");
+                    },
+                    deactivated(){
+                        console.log("%c component C has %cdeactivated", "color:#90f;", "color:#f00;");
+                    }
+                },
+
+            }
+        })
+    </script>
+</body>
+</html>

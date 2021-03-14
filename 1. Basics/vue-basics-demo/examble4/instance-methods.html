@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue实例方法 示例</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <!-- 本 demo 演示了 $mount(), $destroy(), $forceUpdate(), $nextTick() 等 4 个实例方法的使用 -->
+    <h1>Vue实例方法 示例</h1>
+    <hr>
+    <div id="app"></div>
+    <button onclick="update()">刷新</button>
+    <button onclick="updateData()">修改数据</button>
+    <button onclick="destroy()">销毁</button>
+
+    <script type="text/javascript">
+        let AppExtend = Vue.extend({
+            template: `<div>{{message}}</div>`,
+            data: function (){
+                return{ message:"Hello World! 我学会了！" }
+            },
+            //声明一些钩子函数，以查看效果
+            created: function () {
+                console.log("1. created 已发生！");
+            },
+            mounted: function () {
+                console.log("2. mounted 已发生！");
+            },
+            updated: function () {
+                console.log("3. updated 已发生！");
+            },
+            activated: function() {
+                console.log("4. activated 已发生！");
+            },
+            destroyed: function() {
+                console.log("5. destroyed 已发生！");
+            },
+        });
+
+        /* $mount() */
+        let app = new AppExtend(); //此时 created 被触发
+        app.$mount("#app"); //此时 mounted 被触发
+        //由于 $mount() 方法返回的是 Vue 扩展实例自身，因此上面代码可以写成链式调用形式：
+        // let app = new AppExtend().$mount("#app");
+
+        /* $destroy() */
+        function destroy(){
+            app.$destroy();
+        }
+
+        /* $forceUpdate() */
+        function update(){
+            app.$forceUpdate();
+        }
+
+        /* $nextTick() */
+        function updateData() {
+            app.message += " 哎呀~";
+            console.log("app.$nextTick之外：DOM中的字符串变成：" + app.$el.innerText);//新的 DOM 内容未被立即渲染，这里获取的还是老的
+
+            //通过 $nextTick() 执行异步操作，获取新的 DOM 内容
+            app.$nextTick(function(){
+                console.log("app.$nextTick之内：DOM中的字符串变成：" + app.$el.innerText);
+            });
+        }
+
+    </script>
+</body>
+</html>

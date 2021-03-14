@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-for 示例</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>v-for 示例</h1>
+    <hr>
+    <div id="app">
+        <div>共有 {{list.length}} 条数据</div>
+        <ul>
+            <li v-for="item, index in sortList">({{index}}) {{item}}</li>
+        </ul>
+        <p>程序员的经典打扮</p>
+        <ul>
+            <li v-for="(val, key, index) in object">({{index}}) {{key}}:{{val}}</li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#app",
+            data:{
+                list: [88,99,56,87,23,5,6,100,45,18,38,62,77],
+                object: {
+                    a: '格子衫',
+                    b: '牛仔裤',
+                    c: '白球鞋',
+                    d: '电脑背包',
+                    e: '黑框眼镜'
+                }
+            },
+            computed: {
+                sortList: function() {
+                    return this.list.sort((x,y) => x-y);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

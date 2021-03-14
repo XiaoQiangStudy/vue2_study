@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>watch选项 示例</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>watch选项 示例</h1>
+    <hr>
+    <div id="app">
+        <p>当前温度：{{temperature}}℃</p>
+        <p :style="wetherColor">穿衣建议：{{wearAdvice}}</p>
+        <button @click="grow">升温</button>
+        <button @click="drop">降温</button>
+        <p>用户信息：{{object.name}}, {{object.age}}岁</p>
+        <button @click="addAge">add age</button>
+        <p>{{array}}</p> 
+        <button @click="push2Array">添加数组元素</button>
+        <button @click="changeArrayItem">修改数组元素</button>
+    </div>
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#app",
+            data: {
+                temperature: 26,
+                wearAdvice: "你喜欢咯",
+                wetherColor: "color:green",
+                object: {
+                    name: '刘诗诗',
+                    age: 28
+                },
+                array: ['A', 'B', 'C']
+            },
+            methods:{
+                grow: function() {
+                    this.temperature++;
+                },
+                drop: function(){
+                    this.temperature--;
+                },
+                addAge(){
+                    this.user.age++;
+                },
+                push2Array(){
+                    this.array.push('D');
+                },
+                changeArrayItem(){
+                    this.array[0] = 'Z';
+                }
+            },
+            watch: {
+                temperature: function(newVal, oldVal){
+                    console.log("执行 watch", oldVal, newVal);
+                    if(newVal >= 40){
+                        this.wearAdvice = "全裸最好";
+                    }else if(newVal >= 30){
+                        this.wearAdvice = "背心和比基尼";
+                    }else if(newVal >= 26){
+                        this.wearAdvice = "短袖短裤或短裙";
+                    }else if(newVal >= 16){
+                        this.wearAdvice = "夹克长裙";
+                    }else if(newVal >= 0){
+                        this.wearAdvice = "羊毛衫";
+                    }else if(newVal >= -10){
+                        this.wearAdvice = "棉袄和羽绒服";
+                    }else{
+                        this.wearAdvice = "假装自己是企鹅吧！";
+                    }
+                },
+                //默认不会进行深监听
+                // user: function(newVal, oldVal){
+                //     console.log(`watch 到 user 已修改`);
+                //     console.log('oldValue', oldVal);
+                //     console.log('newValue', newVal);
+                // },
+                object: {
+                    handler(newVal, oldVal){
+                        console.log(`watch 到 user 已修改`);
+                        console.log('oldValue', oldVal.name, oldVal.age);//此处拿到的是新值（对于引用类型，watch拿不到旧值）
+                        console.log('newValue', newVal.name, newVal.age);
+                    },
+                    deep: true
+                },
+                array: {
+                    handler(newVal, oldVal){
+                        console.log("array has change", oldVal, newVal);
+                    },
+                    deep: true
+                }
+                // array(newVal, oldVal){
+                //     console.log("array has change", oldVal, newVal);
+                // }
+            }
+        });
+        app.$watch("temperature", function(newVal, oldVal){
+            console.log("执行 app.$watch");
+            if(newVal >= 40){
+                this.wetherColor = "#F00";
+            }else if(newVal >= 30){
+                this.wetherColor = "#F90";
+            }else if(newVal >= 26){
+                this.wetherColor = "#d8ae07";
+            }else if(newVal >= 16){
+                this.wetherColor = "#03b103";
+            }else if(newVal >= 0){
+                this.wetherColor = "#0CF";
+            }else if(newVal >= -10){
+                this.wetherColor = "#09F";
+            }else{
+                this.wetherColor = "#00F";
+            }
+            this.wetherColor = "color:" + this.wetherColor;
+        })
+    </script>
+</body>
+</html>

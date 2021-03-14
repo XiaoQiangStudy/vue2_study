@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue.extend 示例</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>Vue.extend 示例</h1>
+    <hr>
+    <baidu></baidu>
+    <p id="baidu">标签被替换了吗</p>
+    <script type="text/javascript">
+        //定义
+        let baiduExtend = Vue.extend({
+            template: "<button :title='url' @click='go'>{{text}}</button>",
+            data: function() {
+                return {
+                    url: "https://www.baidu.com",
+                    text: "百度一下，你就知道"
+                }
+            },
+            methods: {
+                go: function(){
+                        window.open(this.url);
+                    }
+            }
+        });
+        //挂载( 单词 mount: 准备/安排)
+        new baiduExtend().$mount("baidu");
+        new baiduExtend().$mount("#baidu");
+    </script>
+</body>
+</html>

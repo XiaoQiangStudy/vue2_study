@@ -1,0 +1,14 @@
+{
+  "name": "vue",
+  "version": "1.0.0",
+  "description": "vue basic demo by Jayhoo",
+  "main": "index.js",
+  "scripts": {
+    "go": "live-server"
+  },
+  "keywords": [
+    "vue"
+  ],
+  "author": "Jayhoo",
+  "license": "ISC"
+}

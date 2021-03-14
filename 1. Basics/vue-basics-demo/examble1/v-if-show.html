@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-if & v-else & v-show 示例</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>v-if & v-else & v-show 示例</h1>
+    <hr>
+    <div id="app">
+        <p v-if="isLogin">欢迎，Jayhoo!</p>
+        <p v-else>登录失败..</p>
+        <p v-show="isLogin && !!jifen">积分：{{jifen}}</p>
+    </div>
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#app",
+            data: {
+                isLogin: false,
+                jifen: 560
+            }
+        })
+    </script>
+</body>
+</html>

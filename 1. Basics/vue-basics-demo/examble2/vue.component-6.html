@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Component 示例(6) - 自定义组件双向绑定</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+    <style>
+        .select-button{margin: 10px; border: solid 1px #f90; border-radius: 4px; background: #fff; color: #f90; outline: none;}
+        .select-button.selected{background-color: #f90; color: #fff;}
+    </style>
+</head>
+<body>
+    <h1>Component 示例(6) - 自定义组件双向绑定</h1>
+    <hr>
+    <div id="app">
+        <!-- 示例(1): 自定义一个用户注册组件，预期的效果是：点击提交按钮才更新父组件的数据 -->
+        <h2>用户注册组件(对象绑定演示)</h2>
+        <user-register v-model="userInfo"></user-register>
+        <div>
+            <h4>注册结果</h4>
+            <p>姓名: {{userInfo.name || '未填写'}}</p>
+            <p>密码: <input type="text" v-model="userInfo.password"></p>
+        </div>
+
+        <hr>
+
+        <!-- 示例(2): 自定义一个多选组件，每次点击选择都以数组更新父组件的数据 -->
+        <h2>多选组件(数组绑定演示)</h2>
+        <my-select :list="list" v-model="selectedList"></my-select>
+        <p>已经选择：<span v-for="item in selectedList">{{item}}, </span></p>
+    </div>
+    <!-- user-register 组件 -->
+    <script type="text/javascript">
+        Vue.component('userRegister', {
+            template: `<div>
+                    <h4>注册信息填写</h4>
+                    <p>姓名: <input name="name" type="text"  v-model="innerData.name"/></p>
+                    <p>密码: <input name="password" type="text"  v-model="innerData.password"/></p>
+                    <p><button @click="submit">提交</button></p>
+                    <!-- 
+                        如果是像下面这样直接使用data，就直接绑定到父组件的数据中去了
+                        <p>姓名: <input name="name" type="text" v-model="data.name" /></p>
+                    -->
+                </div>`,
+            //定义用于双向绑定的自定义属性
+            props: ['data'],
+            //定制组件的 v-model 行为
+            model: {
+                prop: 'data',
+                event: 'data-change'
+            },
+            data(){
+                return {
+                    innerData: Object.assign({}, this.data) //因为传进来的是对象，做一下拷贝
+                }
+            },
+            methods: {
+                //在提交中触发 v-model 更新
+                submit(){
+                    //触发 model 中指定的 data-change 事件
+                    this.$emit('data-change', Object.assign({}, this.innerData));//更新v-model时，也是传拷贝的值，否则会把内部数据对象的引用赋值给外部数据对象
+                    alert("注册信息已提交");
+                }
+            }
+        });
+    </script>
+    <!-- my-select 组件 -->
+    <script type="text/javascript">
+        Vue.component('mySelect', {
+            template: `<div>
+                    <button class="select-button" v-for="item in list" @click="select(item, $event)">{{item}}</button>
+                </div>`,
+            props: ['list', 'selectedList'],
+            model: {
+                prop: 'selectedList',
+                event: 'select-change'
+            },
+            methods:{
+                select(value, event){
+                    let selectedIndex = this.selectedList.indexOf(value);
+                    if(selectedIndex >= 0){
+                        this.selectedList.splice(selectedIndex, 1);
+                        event.target.classList.remove('selected');
+                    }else{
+                        this.selectedList.push(value);
+                        event.target.classList.add('selected');
+                    }
+                    //触发model更新事件
+                    this.$emit('select-change', this.selectedList);
+                }
+            }
+        })
+
+    </script>
+    <!-- vue应用实例 -->
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#app",
+            data:{
+                userInfo: {
+                    name: "男子汉",
+                    password: ""
+                },
+                list: ["苹果", "香蕉", "桃子", "凤梨", "哈密瓜"],
+                selectedList: []
+            }
+        });
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Template模板 示例</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>Template模板 示例</h1>
+    <hr>
+    <div id="app">
+        {{message}}
+    </div>
+
+    <template id="tpl2">
+        <h2 style="color:#F90">Hello，这是 template标签 模板</h2>
+    </template>
+    <!-- template标签换成其他标签也能正确渲染模板，但会把该标签显示出来（无论是不是自定义的标签），如：
+    <div id="tpl2-1">
+        <h2 style="color:#F90">Hello，这是 普通标签 模板</h2>
+    </div>
+     -->
+
+    <script id="tpl3" type="x-template">
+        <h2 style="color:#F90">Hello，这是 script标签 模板</h2>
+    </script>
+    <!-- script 如果不加 type="x-template" 也是可以的，但浏览器会报一个错误-->
+
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#app",
+            data: {
+                message:"Hello World! 我学会了！"
+            },
+            // template: `<h2 style="color:#F90">Hello，这是 字符串 模板</h2>`
+            // template: "#tpl2"
+            template: "#tpl3"
+        })
+    </script>
+</body>
+</html>

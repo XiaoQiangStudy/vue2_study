@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Component 示例(2) - 自定义标签属性</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>Component 示例(2) - 自定义标签属性</h1>
+    <hr>
+    <div id="app">
+        <authod name="Jayhoo" :say-hello="message" ></authod>
+    </div>
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#app",
+            data: {
+                message: "大家好"
+            },
+            components: {
+                "authod": {
+                    template: `<p style="color:#f90">{{sayHello}}, 我是 {{name}}</p>`,
+                    props: ["name", "sayHello"]
+                }
+            }
+        }); 
+    </script>
+</body>
+</html>

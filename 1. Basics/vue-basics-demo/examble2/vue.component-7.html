@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Component 示例(7) - 通过自定义全局事件进行组件间通讯</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>Component 示例(7) - 通过自定义全局事件进行组件间通讯</h1>
+    <hr>
+    <div id="app">
+        <com-a></com-a>
+        <com-b></com-b>
+    </div>
+    <script type="text/javascript">
+        //定义一个用于通讯的 Vue 实例 event
+        const event = new Vue();
+        //组件A
+        Vue.component('comA', {
+            template: `<div>
+                <h4>Hi, 我是组件A</h4>
+                <p>我想告诉组件B：<input v-model="toB" /><button @click="send">发送</button></p>
+                <p>收到组件B的来信：{{fromB}}</p>
+            </div>`,
+            data(){
+                return {
+                    toB: "",
+                    fromB: ""
+                }
+            },
+            mounted(){
+                //监听 send2A 事件
+                event.$on('send2A', this.recived);
+            },
+            beforeDestroy(){
+                //销毁实例前同时销毁 event 的 send2A 事件
+                event.$off('send2A', this.recived);
+            },
+            methods: {
+                send(){
+                    //触发 send2B 事件
+                    event.$emit('send2B', this.toB);
+                },
+                recived(msg){
+                    //收到来信
+                    this.fromB = msg;
+                }
+            }
+        });
+        //组件B
+        Vue.component('comB', {
+            template: `<div>
+                <h4>Hi, 我是组件B</h4>
+                <p>我想告诉组件A：<input v-model="toA" /><button @click="send">发送</button></p>
+                <p>收到组件A的来信：{{fromA}}</p>
+            </div>`,
+            data(){
+                return {
+                    toA: "",
+                    fromA: ""
+                }
+            },
+            mounted(){
+                //监听 send2B 事件
+                event.$on('send2B', this.recived);
+            },
+            beforeDestroy(){
+                //销毁实例前同时销毁 event 的 send2B 事件
+                event.$off('send2B', this.recived);
+            },
+            methods: {
+                send(){
+                    //触发 send2A 事件
+                    event.$emit('send2A', this.toA);
+                },
+                recived(msg){
+                    //收到来信
+                    this.fromA = msg;
+                }
+            }
+        });
+        let app = new Vue({
+            el: "#app",
+        });
+        
+    </script>
+</body>
+</html>

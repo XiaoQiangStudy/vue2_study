@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Component 示例(4) - Component标签</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>Component 示例(4) - Component标签</h1>
+    <hr>
+    <div id="app">
+        <components :is="whichComponent">当前还不知道</components>
+        <button @click="changeComponent">变换组件</button>
+        <components is="componentB"></components><!-- is不是动态属性，也能执行，但没有意义，不建议这样写 -->
+    </div>
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#app",
+            data:{
+                whichComponent: ""
+            },
+            methods:{
+                changeComponent: function(){
+                    switch (this.whichComponent) {
+                        case "componentA":
+                            this.whichComponent = "componentB";
+                            break;
+                        case "componentB":
+                            this.whichComponent = "componentC";
+                            break;
+                        default: this.whichComponent = "componentA";
+                            break;
+                    }
+                }
+            },
+            components: {
+                "componentA": {
+                    template: `<p style="color:#f90;">Hi~我是组件A</p>`
+                },
+                "componentB": {
+                    template: `<p style="color:#09f;">Hi~我是组件B</p>`
+                },
+                "componentC": {
+                    template: `<p style="color:#9f0;">Hi~我是组件C</p>`
+                },
+            }
+        });
+        
+    </script>
+</body>
+</html>
